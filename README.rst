@@ -1,4 +1,4 @@
-|PyVersion| |Status| |License| |Docs| |Downloads|
+|PyVersion| |Status| |License| |Docs|
 
 Introduction
 ============
@@ -11,20 +11,20 @@ So, based on an asset universe of DARWINs, we will need to select those that mee
 
 A worflow example would be:
 
-**1)** Live/batch request of DARWIN universe data > for example, apply a filter to not get all the DARWINs data (or maybe yes).
+**1)** Live/batch request of ``DARWIN`` universe data > for example, apply a filter to not get all the ``DARWIN``s data (or maybe yes).
 
-**2)** This data will be passed as a pickled object to the DModel component. There we will add some features or make calculations.
+**2)** This data will be passed as a pickled object to the **DModel** component. There we will add some features or make calculations.
 
-**3)** The final calculations/allocations will then be passed to the DStrategy component to accomplish the trading, scheduling and etc.
+**3)** The final calculations/allocations will then be passed to the **DStrategy** component to accomplish the trading, scheduling and etc.
 
 The framework
 =============
 
 **DGateway**: price and volume data, if available.
 
-**DModel**: will be used related with the DStrategy to make predictions and forecasts.
+**DModel**: will be used related with the **DStrategy** to make predictions and forecasts.
 
-**DStrategy**: will be used to launch the final implementation of the DModel, together with the neccesary constraints associated.
+**DStrategy**: will be used to launch the final implementation of the **DModel**, together with the neccesary constraints associated.
 
 Explanations and code
 =====================
@@ -34,10 +34,10 @@ Firstly, you will need to provide new tokens on each **APICredentials.json** fil
 Once done that, the back-end will handle getting new access tokens using the refresh token when the one used is no longer active
 via the **DRefresher** component.
 
-**BEAR IN MIND** that the code in this project will execute in the accountID that you provide in the instantiation of the 
-``DStrategy`` class, so watch our very carefully which accountID do you use to avoid wrong executions.
+**BEAR IN MIND** that the code in this project will execute in the ``accountID`` that you provide in the instantiation of the 
+``DStrategy`` class, so watch our very carefully which ``accountID`` do you use to avoid wrong executions.
 
-As Docker is a complex framework and comprises many different functionalities, the best way to get going
+As ``Docker`` is a complex framework and comprises many different functionalities, the best way to get going
 is to look for some tutorials on the internet or directly visit:
 
 `Docker main website <https://docs.docker.com/get-started/>`_
@@ -74,10 +74,10 @@ Run the following line in a terminal to check the installation:
 
 The Docker images for this project are hosted on the `Darwinex Alpha Team Docker Hub public repository <https://hub.docker.com/repository/docker/dwxalphateam/mendelframework>`_.
 
-Edit your crontab file with something like the following contents. For this to work out, you will need to have the exact path
+Edit your ``crontab`` file with something like the following contents. For this to work out, you will need to have the exact path
 on your server/computer and have downloaded the repository. 
 
-Make sure that the files are **EXECUTABLE**. In Linux ``chmod +x``:
+Make sure that the files are **EXECUTABLE**. In **Linux** ``chmod +x``:
 
 ::
 
@@ -90,7 +90,7 @@ Make sure that the files are **EXECUTABLE**. In Linux ``chmod +x``:
 Documentation
 =============
 
-You can find the complete `API documentation <https://api.darwinex.com/store/>`_ here. You will be able to understand the different exposed enpoints as well has play around with them to understand the returned JSON messages, whether they result in a succesfull request-response attempt or no.
+You can find the complete `API documentation <https://api.darwinex.com/store/>`_ here. You will be able to understand the different exposed enpoints as well has play around with them to understand the returned ``JSON`` messages, whether they result in a succesfull request-response attempt or no.
 
 Other helpful links:
 
@@ -101,14 +101,14 @@ Discussion
 ==========
 
 The `Darwinex API Community Forum <https://https://community.darwinex.com/>`_ is one of the places to discuss
-Darwinex API and anything related to it.
+``Darwinex API`` and anything related to it.
 
 Furthermore, you can join the `Darwinex Collective Slack <https://join.slack.com/t/darwinex-collective/shared_invite/enQtNjg4MjA0ODUzODkyLWFiZWZlMDZjNGVmOGE2ZDBiZGI4ZWUxNjM5YTU0MjZkMTQ2NGZjNGIyN2QxZDY4NjUyZmVlNmU3N2E2NGE1Mjk>`_ for Q&A, debug and more.
 
 Disclaimer
 ==========
 
-The software is provided on the conditions of the BSD license that you can find inside the package.
+The software is provided on the conditions of the **BSD** license that you can find inside the package.
 
 **The αlpha's time has begun!**
 
