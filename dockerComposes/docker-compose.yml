@@ -18,7 +18,7 @@ services:
                 max-file: "3"
     # Create volume: host:docker > The files will be in the root directory.
     volumes:
-      - /root/mendelframework/D-Strategy1/APICredentials.json:/APICredentials.json
+      - /root/mendel-framework/D-Strategy1/APICredentials.json:/APICredentials.json
     restart: no
 
   # drefresher instance
@@ -35,7 +35,7 @@ services:
                 max-file: "3"
     # Create volume: host:docker > The files will be in the root directory.
     volumes:
-      - /root/mendelframework/D-Strategy1/APICredentials.json:/APICredentials.json
+      - /root/mendel-framework/D-Strategy1/APICredentials.json:/APICredentials.json
     restart: no
     
 networks:

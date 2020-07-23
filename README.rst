@@ -1,19 +1,21 @@
+|PyVersion| |Status| |License| |Docs| |Downloads|
+
 Introduction
 ============
 
 This is the **Dαrwinex Mendel Framework for DARWIN Portfolio Management in Python**. 
 
-Precisely, this framework is called the ``Mendel`` framework because it is created to **manage quantitatively and dinamically portfolios of DARWINS** and applying quantitative R&D for generating investment decisions.
+Precisely, this framework is called the ``Mendel`` framework because it is created to **manage quantitatively and dinamically portfolios of DARWINS** and applying quantitative **R&D** for generating investment decisions.
 
 So, based on an asset universe of DARWINs, we will need to select those that meet certain criteria.
 
 A worflow example would be:
 
-1) Live/batch request of DARWIN universe data > for example, apply a filter to not get all the DARWINs data (or maybe yes).
+**1)** Live/batch request of DARWIN universe data > for example, apply a filter to not get all the DARWINs data (or maybe yes).
 
-2) This data will be passed as a pickled object to the DModel component. There we will add some features or make calculations.
+**2)** This data will be passed as a pickled object to the DModel component. There we will add some features or make calculations.
 
-3) The final calculations/allocations will then be passed to the DStrategy component to accomplish the trading, scheduling and etc.
+**3)** The final calculations/allocations will then be passed to the DStrategy component to accomplish the trading, scheduling and etc.
 
 The framework
 =============
@@ -70,7 +72,7 @@ Run the following line in a terminal to check the installation:
 
     docker-compose --version
 
-The Docker images for this project are hosted on the `Darwinex Alpha Team Docker Hub public repository <https://hub.docker.com/repository/docker/dwxalphateam/mendelframework>`_
+The Docker images for this project are hosted on the `Darwinex Alpha Team Docker Hub public repository <https://hub.docker.com/repository/docker/dwxalphateam/mendelframework>`_.
 
 Edit your crontab file with something like the following contents. For this to work out, you will need to have the exact path
 on your server/computer and have downloaded the repository. 
@@ -80,10 +82,10 @@ Make sure that the files are **EXECUTABLE**. In Linux ``chmod +x``:
 ::
 
     # Execute at 20:58 previous to 21:00 close:
-    58 20 * * 1-5 /root/mendelframework/dockerComposes/start-strategy.sh
+    58 20 * * 1-5 /root/mendel-framework/dockerComposes/start-strategy.sh
 
     # Execute at minute 30 on every day-of-week to refresh tokens:
-    30 * * * 1-5 /root/mendelframework/dockerComposes/start-refresher.sh
+    30 * * * 1-5 /root/mendel-framework/dockerComposes/start-refresher.sh
 
 Documentation
 =============
@@ -111,3 +113,16 @@ The software is provided on the conditions of the BSD license that you can find 
 **The αlpha's time has begun!**
 
 :Author: Darwinex Alpha Team <content@darwinex.com>
+
+.. |PyVersion| image:: https://img.shields.io/badge/python-3.7+-blue.svg
+   :alt:
+
+.. |Status| image:: https://img.shields.io/badge/status-beta-green.svg
+   :alt:
+
+.. |License| image:: https://img.shields.io/badge/license-BSD-blue.svg
+   :alt:
+
+.. |Docs| image:: https://img.shields.io/badge/Documentation-green.svg
+   :alt: Documentation
+   :target: https://api.darwinex.com/store/

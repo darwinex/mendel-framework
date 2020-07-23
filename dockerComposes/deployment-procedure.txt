@@ -18,15 +18,15 @@ The Docker images for this project are hosted on the `Darwinex Alpha Team Docker
 
 ## (Install git) and download git repo to the root home folder:
 
-apt install git-all && git clone https://github.com/darwinex/mendelframework.git
+apt install git-all && git clone https://github.com/darwinex/mendel-framework.git
 
 # Ensure that the .sh scripts are executable:
-chmod +x /root/mendelframework/dockerComposes/*.sh
+chmod +x /root/mendel-framework/dockerComposes/*.sh
 
 ## Edit your crontab file > crontab -e: 
 
 # Execute at 20:58 previous to 21:00 close:
-58 20 * * 1-5 /root/mendelframework/dockerComposes/start-strategy.sh
+58 20 * * 1-5 /root/mendel-framework/dockerComposes/start-strategy.sh
 
 # Execute at minute 30 on every day-of-week to refresh tokens:
-30 * * * 1-5 /root/mendelframework/dockerComposes/start-refresher.sh
+30 * * * 1-5 /root/mendel-framework/dockerComposes/start-refresher.sh
