@@ -7,11 +7,11 @@ This is the **Dαrwinex Mendel Framework for DARWIN Portfolio Management in Pyth
 
 Precisely, this framework is called the ``Mendel`` framework because it is created to **manage quantitatively and dinamically portfolios of DARWINS** and applying quantitative **R&D** for generating investment decisions.
 
-So, based on an asset universe of **DARWIN**s, we will need to select those that meet certain criteria.
+So, based on an asset universe of **DARWINs**, we will need to select those that meet certain criteria.
 
 A worflow example would be:
 
-**1)** Live/batch request of **DARWIN** universe data > for example, apply a filter to not get all the **DARWIN**s data (or maybe yes).
+**1)** Live/batch request of **DARWIN** universe data > for example, apply a filter to not get all the **DARWINs** data (or maybe yes).
 
 **2)** This data will be passed as a pickled object to the **DModel** component. There we will add some features or make calculations.
 
