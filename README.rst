@@ -38,7 +38,11 @@ via the **DRefresher** component.
 ``DStrategy`` class, so watch our very carefully which ``accountID`` do you use to avoid wrong executions.
 
 As ``Docker`` is a complex framework and comprises many different functionalities, the best way to get going
-is to look for some tutorials on the internet or directly visit: `Docker main website <https://docs.docker.com/get-started/>`_
+is to look for some tutorials on the internet or directly visit: `Docker main website <https://docs.docker.com/get-started/>`_ apart from the tutorials that are in the `Darwinex Youtube Channel <https://www.youtube.com/channel/UC6aYa9XjWy-HmHhyp5uN_9g>`_ that walkthrough the implementation.
+
+In this case, the ``Docker images`` for this project are hosted on the `Darwinex Alpha Team Public Docker Hub repository <https://hub.docker.com/repository/docker/dwxalphateam/mendelframework>`_ as examples. 
+
+In case that you want to implement this for your own accounts, the best way would be to create a dedicated Docker Hub account with your ``DStrategy`` image hosted there (you have one private repository for free) and use the ``DBaseImage`` and the ``DRefresher`` from the `Darwinex Alpha Team Public Docker Hub repository <https://hub.docker.com/repository/docker/dwxalphateam/mendelframework>`_ or just build your own.
 
 Install Docker on a Linux machine:
 
@@ -69,8 +73,6 @@ Run the following line in a terminal to check the installation:
 ::
 
     docker-compose --version
-
-The Docker images for this project are hosted on the `Darwinex Alpha Team Docker Hub public repository <https://hub.docker.com/repository/docker/dwxalphateam/mendelframework>`_.
 
 Edit your ``crontab`` file with something like the following contents. For this to work out, you will need to have the exact path
 on your server/computer and have downloaded the repository. 
