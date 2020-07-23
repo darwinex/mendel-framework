@@ -1,0 +1,43 @@
+version: "3.7"
+
+### Securing ports withing docker: https://dev.to/kovah/be-careful-with-docker-ports-3pih
+
+services:
+  
+  # dstrategy1 instance
+  dstrategy1:
+    build: ../D-Strategy1
+    container_name: dstrategy1
+    hostname: dstrategy1
+    networks:
+      - darwinex_network
+    logging:
+            driver: "json-file"
+            options:
+                max-size: "10m"
+                max-file: "3"
+    # Create volume: host:docker > The files will be in the root directory.
+    volumes:
+      - /APICredentials.json:/APICredentials.json
+    restart: no
+    
+  # drefresher instance
+  drefresher:
+    build: ../D-Refresher
+    container_name: drefresher
+    hostname: drefresher
+    networks:
+      - darwinex_network
+    logging:
+            driver: "json-file"
+            options:
+                max-size: "10m"
+                max-file: "3"
+    # Create volume: host:docker > The files will be in the root directory.
+    volumes:
+      - /APICredentials.json:/APICredentials.json
+    restart: no
+
+networks:
+  darwinex_network:
+    name: darwinex_network

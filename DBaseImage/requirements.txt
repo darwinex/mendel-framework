@@ -1,0 +1,2 @@
+pyTelegramBotAPI==3.6.6
+mlfinlab==0.12.3
