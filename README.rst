@@ -1,7 +1,7 @@
 |PyVersion| |Status| |License| |Docs|
 
-Introduction
-============
+Dαrwinex Mendel Framework for DARWIN Portfolio Management
+=========================================================
 
 This is the **Dαrwinex Mendel Framework for DARWIN Portfolio Management in Python**. 
 
