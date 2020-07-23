@@ -29,7 +29,7 @@ The framework
 Explanations and code
 =====================
 
-Firstly, you will need to provide new tokens on each **APICredentials.json** file for each component to work. 
+Firstly, you will need to provide new tokens on each ``APICredentials.json`` file for each component to work. 
 
 Once done that, the back-end will handle getting new access tokens using the refresh token when the one used is no longer active
 via the **DRefresher** component.
@@ -38,9 +38,7 @@ via the **DRefresher** component.
 ``DStrategy`` class, so watch our very carefully which ``accountID`` do you use to avoid wrong executions.
 
 As ``Docker`` is a complex framework and comprises many different functionalities, the best way to get going
-is to look for some tutorials on the internet or directly visit:
-
-`Docker main website <https://docs.docker.com/get-started/>`_
+is to look for some tutorials on the internet or directly visit: `Docker main website <https://docs.docker.com/get-started/>`_
 
 Install Docker on a Linux machine:
 
