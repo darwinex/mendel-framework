@@ -162,6 +162,10 @@ class DAssetUniverseClass(object):
                                                                     _timeframe='/ALL') # 1D, 1W, 1M, 3M, 6M, 1Y, 2Y, ALL
         self._assertRequestResponse(RETURNED_RESPONSE)
 
+        # Create a dataframe with just the close of each DARWIN:
+        RETURNED_RESPONSE = self._getClosesDataFrame(RETURNED_RESPONSE)
+        logger.warning(RETURNED_RESPONSE)
+
         # Get the last more recent values:
         LAST_CANDLES = RETURNED_RESPONSE.iloc[-1, :].values
         logger.warning(LAST_CANDLES)
