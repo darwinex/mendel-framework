@@ -38,7 +38,7 @@ class DRefresherClass(object):
         self.INFO_API.AUTHENTICATION._get_access_refresh_tokens_wrapper()
 
         # If failed, new access token will attribute will be None:
-        if self.INFO_API.AUTHENTICATION._auth_creds.access_token:
+        if self.INFO_API.AUTHENTICATION.access_token:
 
             # Save the credentials:
             self._saveJSONCredentials(self.INFO_API.AUTHENTICATION._auth_creds)
