@@ -36,9 +36,17 @@ class DRefresherClass(object):
         # Generate new credentials:
         logger.warning('[REFRESH_CREDS] - Time to refresh > ¡Generate TOKENS!')
         self.INFO_API.AUTHENTICATION._get_access_refresh_tokens_wrapper()
+        logger.warning(self.INFO_API.AUTHENTICATION._auth_creds)
 
-        # Save the credentials:
-        self._saveJSONCredentials(self.INFO_API.AUTHENTICATION._auth_creds)
+        # Check new creds:
+        if self.INFO_API.AUTHENTICATION._auth_creds:
+
+            # Save the credentials:
+            self._saveJSONCredentials(self.INFO_API.AUTHENTICATION._auth_creds)
+        
+        else:
+            logger.warning('[REFRESH_CREDS] - Credentials NOT RETRIEVED')
+            self.BOT.bot_send_msg('[REFRESH_CREDS] - Credentials NOT RETRIEVED')
 
     def _loadJSONCredentials(self):
 
