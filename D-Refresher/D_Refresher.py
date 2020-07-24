@@ -1,5 +1,6 @@
 # Import the different classes:
 from darwinexapis.API.InfoAPI.DWX_Info_API import DWX_Info_API
+from telegramBot import NotificationsTelegramBot
 
 # Import the logger:
 import logging, json
@@ -12,6 +13,9 @@ class DRefresherClass(object):
     Ex (execute every 30 min): */30 * * * * start-refresher.sh'''
 
     def __init__(self):
+
+        # Create bot object:
+        self.BOT = NotificationsTelegramBot("1159315823:AAFexwCPKJvMeulDnS-he3NCeAjWqcTgejY", 779773830)
 
         # Initialize the objects:
         self._defineAPIObjects()
@@ -53,6 +57,9 @@ class DRefresherClass(object):
 
         # Log:
         logger.warning('[CREDS_SAVE] - ¡Credentials saved!')
+
+        # Concluded:
+        self.BOT.bot_send_msg('[CREDS_SAVE] - ¡Credentials saved and concluded!')
 
 if __name__ == "__main__":
 
