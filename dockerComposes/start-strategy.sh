@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # Just execute:
-docker-compose -f "docker-compose.yml" up -d dstrategy1
+docker-compose -f "/root/mendel-framework/dockerComposes/docker-compose.yml" up -d dstrategy1
