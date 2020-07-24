@@ -19,7 +19,7 @@ services:
     # Create volume: host:docker > The files will be in the root directory.
     volumes:
       - /APICredentials.json:/APICredentials.json
-    restart: no
+    restart: "no"
     
   # drefresher instance
   drefresher:
@@ -36,7 +36,7 @@ services:
     # Create volume: host:docker > The files will be in the root directory.
     volumes:
       - /APICredentials.json:/APICredentials.json
-    restart: no
+    restart: "no"
 
 networks:
   darwinex_network:
