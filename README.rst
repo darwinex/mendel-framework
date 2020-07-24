@@ -85,7 +85,7 @@ Make sure that the files are **EXECUTABLE**. In **Linux** ``chmod +x``:
     58 20 * * 1-5 /root/mendel-framework/dockerComposes/start-strategy.sh
 
     # Execute at minute 30 on every day-of-week to refresh tokens:
-    30 * * * 1-5 /root/mendel-framework/dockerComposes/start-refresher.sh
+    30 * * * * /root/mendel-framework/dockerComposes/start-refresher.sh
 
 Documentation
 =============
