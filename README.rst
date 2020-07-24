@@ -74,18 +74,36 @@ Run the following line in a terminal to check the installation:
 
     docker-compose --version
 
-Edit your ``crontab`` file with something like the following contents. For this to work out, you will need to have the exact path
-on your server/computer and have downloaded the repository. 
+(Install git) and download git repo to the root home folder:
 
-Make sure that the files are **EXECUTABLE**. In **Linux** ``chmod +x``:
+::
+
+    sudo apt install git-all && git clone https://github.com/darwinex/mendel-framework.git
+
+Ensure that the .sh scripts are executable. In **Linux**:
+
+::
+
+    chmod +x /root/mendel-framework/D-Strategy1/*.sh
+    chmod +x /root/mendel-framework/D-Refresher/*.sh
+
+Also, you will have to download the Docker ``images`` from the Docker Hub repository:
+
+::
+
+    cd /root/mendel-framework/dockerComposes/ && docker-compose pull
+
+Edit your ``crontab`` file (``crontab -e``) with something like the following contents. 
+
+For this to work out, you will need to have the exact path on your server/computer and have downloaded the repository. 
 
 ::
 
     # Execute at 20:58 previous to 21:00 close:
-    58 20 * * 1-5 /root/mendel-framework/dockerComposes/start-strategy.sh
+    58 20 * * 1-5 docker-compose -f "/root/mendel-framework/dockerComposes/docker-compose.yml" up -d dstrategy1
 
     # Execute at minute 30 on every day-of-week to refresh tokens:
-    */30 * * * * /root/mendel-framework/dockerComposes/start-refresher.sh
+    */30 * * * * docker-compose -f "/root/mendel-framework/dockerComposes/docker-compose.yml" up -d drefresher
 
 Documentation
 =============

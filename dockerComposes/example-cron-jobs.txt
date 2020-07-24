@@ -1,8 +1,0 @@
-# Put this into cron > crontab -e
-# Generally cron will execute at your computer's timezone.
-
-# Execute at 20:58 previous to 21:00 close:
-58 20 * * 1-5 /root/mendel-framework/dockerComposes/start-strategy.sh
-
-# Execute at minute 30 on every day-of-week to refresh tokens:
-*/30 * * * * /root/mendel-framework/dockerComposes/start-refresher.sh
