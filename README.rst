@@ -103,7 +103,7 @@ For this to work out, you will need to have the exact path on your server/comput
     58 20 * * 1-5 /usr/local/bin/docker-compose -f "/root/mendel-framework/dockerComposes/docker-compose.yml" up -d dstrategy1
 
     # Execute at minute 30 on every day-of-week to refresh tokens:
-    30 * * * * /usr/local/bin/docker-compose -f "/root/mendel-framework/dockerComposes/docker-compose.yml" up -d drefresher
+    */30 * * * * /usr/local/bin/docker-compose -f "/root/mendel-framework/dockerComposes/docker-compose.yml" up -d drefresher
 
 Documentation
 =============
