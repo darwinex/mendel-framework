@@ -20,10 +20,10 @@ class DTestingMethods(object):
     def __init__(self):
 
         ### Let's create the auth credentials:
-        self.AUTH_CREDS = {'access_token': 'b6a1b069-88d2-3c60-aa9c-810eb7d6a1d2',
+        self.AUTH_CREDS = {'access_token': '2b2d14f5-2737-31a4-a449-34f537d6cf2e',
                            'consumer_key': 'Z4_p3FDLhI5x9pMlYWHvyiWW04Qa',
                            'consumer_secret': 'NR6hDOCbjJEfYzB2Hg1B9nfHhpAa',
-                           'refresh_token': 'a755468c-8c2c-345b-8011-7488f8371b8f'}
+                           'refresh_token': '89ee3559-02b3-3362-89d6-6eeaa6ab46e1'}
 
         # Create the objects:
         self._defineAPIObjects()
@@ -104,7 +104,9 @@ class DTestingMethods(object):
 
         # Convert to dataframe:
         DF_CLOSE = pd.DataFrame.from_dict(self.newDict)
-        DF_CLOSE.to_csv(os.path.expandvars('${HOME}/Desktop/quant-research-env/DARWINStrategyContentSeries/Data/') + 'ClosePricePortfolio.csv')
+        #DF_CLOSE.to_csv(os.path.expandvars('${HOME}/Desktop/quant-research-env/DARWINStrategyContentSeries/Data/') + 'ClosePricePortfolio.csv')
+        DF_CLOSE.to_csv(os.path.expandvars('${HOME}/Desktop/') + 'ClosePricePortfolio.csv')
+        print('DATAFRAME SAVED')
 
         # Drop NaNs:
         #logger.warning(f'Quantity of NaNs: {DF_CLOSE.isnull().sum().sum()}')
@@ -461,10 +463,10 @@ if __name__ == "__main__":
 
     # This worked:
     # NOTE: Watch for starting dates, they might not be the same for all darwins!
-    #DASSETUNIVERSE._createCandlePortfolio(symbols=['PLF', 'SYO', 'ZVQ', 'OOS', 'CIS', 'ERQ'])
+    DASSETUNIVERSE._createCandlePortfolio(symbols=['PLF', 'SYO', 'ZVQ', 'OOS', 'CIS', 'ERQ'])
     #DASSETUNIVERSE._createCandlePortfolio(symbols=['HFD', 'SYO', 'KLG'])
     #DASSETUNIVERSE._createCandlePortfolio(symbols=['HFD.5.17', 'SYO.5.24', 'KLG.5.2'])
-    DASSETUNIVERSE._createLastQuotes(symbols=['PLF', 'SYO', 'ZVQ'])
+    #DASSETUNIVERSE._createLastQuotes(symbols=['PLF', 'SYO', 'ZVQ'])
 
     # This worked:
     #DASSETUNIVERSE._currentPositions(accountID=2000062056)
