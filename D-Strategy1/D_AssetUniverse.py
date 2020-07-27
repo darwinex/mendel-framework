@@ -105,52 +105,36 @@ class DAssetUniverseClass(object):
     def _createFilteredCandlePortfolio(self):
 
         # Get filtered DARWINs:
-        while True:
+        RETURNED_RESPONSE = self.INFO_API._Get_Filtered_DARWINS_(_filters=[['d-score', 80, 100, 'actual'],
+                                                                            #['drawdown', -10, 0, '6m'],
+                                                                            ['return', 3, 100, '1m']],
+                                                                 _order=['return','12m','DESC'],
+                                                                 _page=0, # Sets the page we want to start from
+                                                                 _perPage=50, # Sets the items per page we want to get
+                                                                 _delay=1.0)
+        self._assertRequestResponse(RETURNED_RESPONSE)
 
-            # If the hour is X, do something:
-            if datetime.now().hour == 21 and datetime.now().minute == 56:
+        # Get the symbols and delete the suffix:
+        FILTERED_DARWIN_SYMBOLS = RETURNED_RESPONSE['productName'].to_list()
+        FILTERED_DARWIN_SYMBOLS = [eachSymbol.split('.')[0] for eachSymbol in FILTERED_DARWIN_SYMBOLS]
 
-                RETURNED_RESPONSE = self.INFO_API._Get_Filtered_DARWINS_(_filters=[['d-score', 80, 100, 'actual'],
-                                                                                  #['drawdown', -10, 0, '6m'],
-                                                                                   ['return', 3, 100, '1m']],
-                                                                        _order=['return','12m','DESC'],
-                                                                        _page=0, # Sets the page we want to start from
-                                                                        _perPage=50, # Sets the items per page we want to get
-                                                                        _delay=1.0)
-                self._assertRequestResponse(RETURNED_RESPONSE)
-
-                # Get the symbols and delete the suffix:
-                FILTERED_DARWIN_SYMBOLS = RETURNED_RESPONSE['productName'].to_list()
-                FILTERED_DARWIN_SYMBOLS = [eachSymbol.split('.')[0] for eachSymbol in FILTERED_DARWIN_SYMBOLS]
-
-                # Get those assets here:
-                self._createCandlePortfolio(symbols=FILTERED_DARWIN_SYMBOLS)
-
-            else:
-                pass
+        # Get those assets here:
+        self._createCandlePortfolio(symbols=FILTERED_DARWIN_SYMBOLS)
 
     def _createFilteredPortfolio(self):
 
         # Get filtered DARWINs:
-        while True:
+        RETURNED_RESPONSE = self.INFO_API._Get_Filtered_DARWINS_(_filters=[['d-score', 80, 100, 'actual'],
+                                                                            #['drawdown', -10, 0, '6m'],
+                                                                            ['return', 3, 100, '1m']],
+                                                                 _order=['return','12m','DESC'],
+                                                                 _page=0, # Sets the page we want to start from
+                                                                 _perPage=50, # Sets the items per page we want to get
+                                                                 _delay=1.0)
+        self._assertRequestResponse(RETURNED_RESPONSE)
 
-            # If the hour is X, do something:
-            if datetime.now().hour == 21 and datetime.now().minute == 56:
-
-                RETURNED_RESPONSE = self.INFO_API._Get_Filtered_DARWINS_(_filters=[['d-score', 80, 100, 'actual'],
-                                                                                  #['drawdown', -10, 0, '6m'],
-                                                                                   ['return', 3, 100, '1m']],
-                                                                        _order=['return','12m','DESC'],
-                                                                        _page=0, # Sets the page we want to start from
-                                                                        _perPage=50, # Sets the items per page we want to get
-                                                                        _delay=1.0)
-                self._assertRequestResponse(RETURNED_RESPONSE)
-
-                # Return it:
-                return RETURNED_RESPONSE
-
-            else:
-                pass
+        # Return it:
+        return RETURNED_RESPONSE
 
     def _createMostRecentQuote(self, symbols):
 
