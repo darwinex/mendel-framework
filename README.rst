@@ -20,7 +20,7 @@ A worflow example would be:
 The framework
 =============
 
-**DGateway**: price and volume data, if available.
+**DAssetUniverse**: price and volume data, if available.
 
 **DModel**: will be used related with the **DStrategy** to make predictions and forecasts.
 
