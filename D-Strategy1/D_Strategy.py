@@ -191,14 +191,17 @@ class DStrategyClass(DAssetUniverseClass, DModelClass):
         # Get the actual positions allocations:
         # The allocations are based on the actual positions equity (invested sum), not on the total equity.
         # Call this previous to _Get_Accounts_ so that we have less latency in real-time equity value.
-        try: 
-            ACTUAL_POSITIONS = self._currentPositions()
+        ACTUAL_POSITIONS = self._currentPositions()
+
+        if ACTUAL_POSITIONS:
+
+            # Get allocation value:
             ACTUAL_POSITIONS['allocation'] = ACTUAL_POSITIONS['allocation'] / 100
 
             # Change the names in the productName col:
             ACTUAL_POSITIONS['productName'] = ACTUAL_POSITIONS['productName'].apply(lambda x: x.split('.')[0])
 
-        except KeyError:
+        else:
 
             # If we fall here it's because there are no positions held:
             ACTUAL_POSITIONS = {'allocation': 0.0}
@@ -216,7 +219,9 @@ class DStrategyClass(DAssetUniverseClass, DModelClass):
         logger.warning(f'INVESTED FRACTION: {investedFraction}')
 
         # Get the allocations based on all the equity:
-        try: 
+        if ACTUAL_POSITIONS['allocation']: 
+
+            # If the allocation is not zero:
             ACTUAL_POSITIONS['allocation_total'] = round(ACTUAL_POSITIONS['allocation'] * investedFraction, 2)
 
             # Get the dictionary of allocation_total + productName:
@@ -224,11 +229,11 @@ class DStrategyClass(DAssetUniverseClass, DModelClass):
             logger.warning(f'ACTUAL POSITIONS FOR DT: <{datetime.now()}>')
             logger.warning(ACTUAL_POS_DICT)
 
-        except KeyError:
+        elif ACTUAL_POSITIONS['allocation'] == 0.0:
 
             # If we fall here it's because there are no positions held:
-            ACTUAL_POS_DICT = {}
-
+            ACTUAL_POS_DICT = {eachKey : 0.0 for eachKey in finalAllocationsDict}
+            
         # Pass to the trades calculation method:
         FINAL_CAPITAL_ALLOCATIONS = self._finalTradesCalculation(ACTUAL_POS_DICT, finalAllocationsDict, equityValue)
         logger.warning(f'FINAL CAPITAL ALLOCATIONS FOR DT: <{datetime.now()}>')
@@ -241,7 +246,9 @@ class DStrategyClass(DAssetUniverseClass, DModelClass):
 
         # Log:
         logger.warning(f'[FINAL_TRADES] - ACTUAL ALLO DICT: {actualAlloDict}')
+        self.BOT.bot_send_msg(f'[FINAL_TRADES] - ACTUAL ALLO DICT: {actualAlloDict}')
         logger.warning(f'[FINAL_TRADES] - FINAL ALLO DICT: {finalAlloDict}')
+        self.BOT.bot_send_msg(f'[FINAL_TRADES] - FINAL ALLO DICT: {finalAlloDict}')
 
         # Set the new dictionary:
         EXECUTION_ALLOCATIONS = {}
@@ -256,8 +263,10 @@ class DStrategyClass(DAssetUniverseClass, DModelClass):
                     
                     # Get the change in capital we need to make:
                     capitalFinal = (finalAllocation * actualEquity) - (actualAllocation * actualEquity)
+
                     # Add it and add a boolean flag if we had actually the position (True) or not (False)
-                    EXECUTION_ALLOCATIONS[finalAsset] = [round(capitalFinal,2), True]
+                    presenceBoolean = True if actualAllocation else False
+                    EXECUTION_ALLOCATIONS[finalAsset] = [round(capitalFinal,2), presenceBoolean]
 
                 # If we don't have a position, add it or not:
                 elif actualAsset != finalAsset:
@@ -283,7 +292,9 @@ class DStrategyClass(DAssetUniverseClass, DModelClass):
 
         # Ex: {'HFD': [-1486.9, True], 'SYO': [-2416.21, True], 'HLS': [-743.45, True], 'JKS': [2787.93, False], 'OPQ': [1858.62, False]}
         sellTrades = {eachKey: eachValue for eachKey, eachValue in tradesToExecuteDict.items() if eachValue[0] < 0}
+        logger.warning(f'SELL TRADES: {sellTrades}')
         buyTrades = {eachKey: eachValue for eachKey, eachValue in tradesToExecuteDict.items() if eachValue[0] > 0}
+        logger.warning(f'BUY TRADES: {buyTrades}')
 
         # First we need to SELL and then buy > Two loops:
         # SELL LOOP:
@@ -324,11 +335,11 @@ class DStrategyClass(DAssetUniverseClass, DModelClass):
             if presenceBoolean:
                 try:
                     # 25 USD is the minimum to add
-                    assert eachQuantityAbs >= 25
+                    assert eachQuantity >= 25
 
                     # Buy:
                     BUY_ORDER = self._generateBuyOrder(eachProduct, eachQuantity, {})
-                    logger.warning(f'BUY ORDER GENERATED FOR {eachProduct} WITH QUANTITY {eachQuantityAbs}:')
+                    logger.warning(f'BUY ORDER GENERATED FOR {eachProduct} WITH QUANTITY {eachQuantity}:')
                     logger.warning(BUY_ORDER)
                     RETURNED_RESPONSE = self.TRADING_API._Buy_At_Market_(_id=self.accountID, _order=BUY_ORDER)
                     self._assertRequestResponse(RETURNED_RESPONSE)
@@ -340,7 +351,7 @@ class DStrategyClass(DAssetUniverseClass, DModelClass):
             else:
                 try:
                     # 200 USD is the minimum to get a position
-                    assert eachQuantityAbs >= 200
+                    assert eachQuantity >= 200
 
                     # Buy:
                     BUY_ORDER = self._generateBuyOrder(eachProduct, eachQuantity, {})

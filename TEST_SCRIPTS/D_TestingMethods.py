@@ -20,10 +20,10 @@ class DTestingMethods(object):
     def __init__(self):
 
         ### Let's create the auth credentials:
-        self.AUTH_CREDS = {'access_token': 'c019d0e5-ee2e-3709-ae81-a48e26d1a583',
+        self.AUTH_CREDS = {'access_token': 'd686ae78-6461-3ace-a949-f9cf933ead4d',
                            'consumer_key': 'Z4_p3FDLhI5x9pMlYWHvyiWW04Qa',
                            'consumer_secret': 'NR6hDOCbjJEfYzB2Hg1B9nfHhpAa',
-                           'refresh_token': 'e58a759d-bbf8-3937-8dfe-7f576977994e'}
+                           'refresh_token': 'eeaf897c-060b-353a-8b07-8de4dd60cea3'}
 
         # Create the objects:
         self._defineAPIObjects()
@@ -105,7 +105,7 @@ class DTestingMethods(object):
         # Convert to dataframe:
         DF_CLOSE = pd.DataFrame.from_dict(self.newDict)
         #DF_CLOSE.to_csv(os.path.expandvars('${HOME}/Desktop/quant-research-env/DARWINStrategyContentSeries/Data/') + 'ClosePricePortfolio.csv')
-        DF_CLOSE.to_csv(os.path.expandvars('${HOME}/Desktop/') + 'ClosePricePortfolio.csv')
+        #DF_CLOSE.to_csv(os.path.expandvars('${HOME}/Desktop/') + 'ClosePricePortfolio.csv')
         print('DATAFRAME SAVED')
 
         # Drop NaNs:
@@ -449,7 +449,7 @@ if __name__ == "__main__":
     # Get it:
     DASSETUNIVERSE = DTestingMethods()
     #DASSETUNIVERSE._createFilteredPortfolio()
-    DASSETUNIVERSE._currentPositions(accountID=2000069671)
+    #DASSETUNIVERSE._currentPositions(accountID=2000069671)
 
     # This worked:
     #alloWeights = np.array([0.13, 0.65, 0.2105])

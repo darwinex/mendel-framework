@@ -143,7 +143,8 @@ class DAssetUniverseClass(object):
                                                                     _resolution='1m', # 1m, 5m, 15m, 30m, 1h, 4h, 1d, 1w, 1mn
                                                                     _from_dt=pd.to_datetime('today') - pd.to_timedelta(3, 'min'), 
                                                                     _to_dt=str(pd.Timestamp('now')),
-                                                                    _timeframe='/ALL') # 1D, 1W, 1M, 3M, 6M, 1Y, 2Y, ALL
+                                                                    _timeframe='/ALL',
+                                                                    _delay=0.5) # 1D, 1W, 1M, 3M, 6M, 1Y, 2Y, ALL
         self._assertRequestResponse(RETURNED_RESPONSE)
 
         # Create a dataframe with just the close of each DARWIN:
