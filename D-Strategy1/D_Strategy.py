@@ -191,11 +191,17 @@ class DStrategyClass(DAssetUniverseClass, DModelClass):
         # Get the actual positions allocations:
         # The allocations are based on the actual positions equity (invested sum), not on the total equity.
         # Call this previous to _Get_Accounts_ so that we have less latency in real-time equity value.
-        ACTUAL_POSITIONS = self._currentPositions()
-        ACTUAL_POSITIONS['allocation'] = ACTUAL_POSITIONS['allocation'] / 100
+        try: 
+            ACTUAL_POSITIONS = self._currentPositions()
+            ACTUAL_POSITIONS['allocation'] = ACTUAL_POSITIONS['allocation'] / 100
 
-        # Change the names in the productName col:
-        ACTUAL_POSITIONS['productName'] = ACTUAL_POSITIONS['productName'].apply(lambda x: x.split('.')[0])
+            # Change the names in the productName col:
+            ACTUAL_POSITIONS['productName'] = ACTUAL_POSITIONS['productName'].apply(lambda x: x.split('.')[0])
+
+        except KeyError:
+
+            # If we fall here it's because there are no positions held:
+            ACTUAL_POSITIONS = {'allocation': 0.0}
 
         # Get accounts and equity values:
         ACCOUNT_VALUES = self.ACCOUNT_API._Get_Accounts_()
@@ -210,12 +216,18 @@ class DStrategyClass(DAssetUniverseClass, DModelClass):
         logger.warning(f'INVESTED FRACTION: {investedFraction}')
 
         # Get the allocations based on all the equity:
-        ACTUAL_POSITIONS['allocation_total'] = round(ACTUAL_POSITIONS['allocation'] * investedFraction, 2)
+        try: 
+            ACTUAL_POSITIONS['allocation_total'] = round(ACTUAL_POSITIONS['allocation'] * investedFraction, 2)
 
-        # Get the dictionary of allocation_total + productName:
-        ACTUAL_POS_DICT = ACTUAL_POSITIONS.set_index('productName').to_dict()['allocation_total']
-        logger.warning(f'ACTUAL POSITIONS FOR DT: <{datetime.now()}>')
-        logger.warning(ACTUAL_POS_DICT)
+            # Get the dictionary of allocation_total + productName:
+            ACTUAL_POS_DICT = ACTUAL_POSITIONS.set_index('productName').to_dict()['allocation_total']
+            logger.warning(f'ACTUAL POSITIONS FOR DT: <{datetime.now()}>')
+            logger.warning(ACTUAL_POS_DICT)
+
+        except KeyError:
+
+            # If we fall here it's because there are no positions held:
+            ACTUAL_POS_DICT = {}
 
         # Pass to the trades calculation method:
         FINAL_CAPITAL_ALLOCATIONS = self._finalTradesCalculation(ACTUAL_POS_DICT, finalAllocationsDict, equityValue)

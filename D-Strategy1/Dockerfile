@@ -1,4 +1,4 @@
-# Use python 3.7 for runnning this application
+# Use dbaseimage for runnning this application
 FROM dwxalphateam/mendelframework:dbaseimage
 
 # Set working dir to '/'

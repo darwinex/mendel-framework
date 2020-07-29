@@ -20,10 +20,10 @@ class DTestingMethods(object):
     def __init__(self):
 
         ### Let's create the auth credentials:
-        self.AUTH_CREDS = {'access_token': '2b2d14f5-2737-31a4-a449-34f537d6cf2e',
+        self.AUTH_CREDS = {'access_token': 'c019d0e5-ee2e-3709-ae81-a48e26d1a583',
                            'consumer_key': 'Z4_p3FDLhI5x9pMlYWHvyiWW04Qa',
                            'consumer_secret': 'NR6hDOCbjJEfYzB2Hg1B9nfHhpAa',
-                           'refresh_token': '89ee3559-02b3-3362-89d6-6eeaa6ab46e1'}
+                           'refresh_token': 'e58a759d-bbf8-3937-8dfe-7f576977994e'}
 
         # Create the objects:
         self._defineAPIObjects()
@@ -141,6 +141,7 @@ class DTestingMethods(object):
         # Get response:
         RETURNED_RESPONSE = self.ACCOUNT_API._Get_Current_Open_Positions_(_id=accountID)
         self._assertRequestResponse(RETURNED_RESPONSE)
+        print('#################################################')
 
         # Convert response:
         if RETURNED_RESPONSE:
@@ -448,7 +449,7 @@ if __name__ == "__main__":
     # Get it:
     DASSETUNIVERSE = DTestingMethods()
     #DASSETUNIVERSE._createFilteredPortfolio()
-    #DASSETUNIVERSE._currentPositions(accountID=2000069671)
+    DASSETUNIVERSE._currentPositions(accountID=2000069671)
 
     # This worked:
     #alloWeights = np.array([0.13, 0.65, 0.2105])
