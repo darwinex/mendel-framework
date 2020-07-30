@@ -20,10 +20,10 @@ class DTestingMethods(object):
     def __init__(self):
 
         ### Let's create the auth credentials:
-        self.AUTH_CREDS = {'access_token': 'd686ae78-6461-3ace-a949-f9cf933ead4d',
+        self.AUTH_CREDS = {'access_token': '1e517d8a-b3d7-3a40-8982-c1006f403389',
                            'consumer_key': 'Z4_p3FDLhI5x9pMlYWHvyiWW04Qa',
                            'consumer_secret': 'NR6hDOCbjJEfYzB2Hg1B9nfHhpAa',
-                           'refresh_token': 'eeaf897c-060b-353a-8b07-8de4dd60cea3'}
+                           'refresh_token': '6052cb70-0d40-347b-9682-8f8674ba7a5a'}
 
         # Create the objects:
         self._defineAPIObjects()
@@ -449,7 +449,12 @@ if __name__ == "__main__":
     # Get it:
     DASSETUNIVERSE = DTestingMethods()
     #DASSETUNIVERSE._createFilteredPortfolio()
-    #DASSETUNIVERSE._currentPositions(accountID=2000069671)
+    A = DASSETUNIVERSE._currentPositions(accountID=2000069671)
+    
+    if A.empty:
+        print('ADSADADA')
+    elif not A.empty:
+        print('qdwqeqeqeq')
 
     # This worked:
     #alloWeights = np.array([0.13, 0.65, 0.2105])
@@ -464,7 +469,7 @@ if __name__ == "__main__":
 
     # This worked:
     # NOTE: Watch for starting dates, they might not be the same for all darwins!
-    DASSETUNIVERSE._createCandlePortfolio(symbols=['PLF', 'SYO', 'ZVQ', 'OOS', 'CIS', 'ERQ'])
+    #DASSETUNIVERSE._createCandlePortfolio(symbols=['PLF', 'SYO', 'ZVQ', 'OOS', 'CIS', 'ERQ'])
     #DASSETUNIVERSE._createCandlePortfolio(symbols=['HFD', 'SYO', 'KLG'])
     #DASSETUNIVERSE._createCandlePortfolio(symbols=['HFD.5.17', 'SYO.5.24', 'KLG.5.2'])
     #DASSETUNIVERSE._createLastQuotes(symbols=['PLF', 'SYO', 'ZVQ'])

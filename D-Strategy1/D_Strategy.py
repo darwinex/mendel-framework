@@ -193,7 +193,8 @@ class DStrategyClass(DAssetUniverseClass, DModelClass):
         # Call this previous to _Get_Accounts_ so that we have less latency in real-time equity value.
         ACTUAL_POSITIONS = self._currentPositions()
 
-        if ACTUAL_POSITIONS:
+        # Check if we have positions:
+        if not ACTUAL_POSITIONS.empty:
 
             # Get allocation value:
             ACTUAL_POSITIONS['allocation'] = ACTUAL_POSITIONS['allocation'] / 100
@@ -219,7 +220,7 @@ class DStrategyClass(DAssetUniverseClass, DModelClass):
         logger.warning(f'INVESTED FRACTION: {investedFraction}')
 
         # Get the allocations based on all the equity:
-        if ACTUAL_POSITIONS['allocation']: 
+        if ACTUAL_POSITIONS['allocation'] != 0.0: 
 
             # If the allocation is not zero:
             ACTUAL_POSITIONS['allocation_total'] = round(ACTUAL_POSITIONS['allocation'] * investedFraction, 2)
