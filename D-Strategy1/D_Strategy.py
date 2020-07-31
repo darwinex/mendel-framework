@@ -193,20 +193,6 @@ class DStrategyClass(DAssetUniverseClass, DModelClass):
         # Call this previous to _Get_Accounts_ so that we have less latency in real-time equity value.
         ACTUAL_POSITIONS = self._currentPositions()
 
-        # Check if we have positions:
-        if not ACTUAL_POSITIONS.empty:
-
-            # Get allocation value:
-            ACTUAL_POSITIONS['allocation'] = ACTUAL_POSITIONS['allocation'] / 100
-
-            # Change the names in the productName col:
-            ACTUAL_POSITIONS['productName'] = ACTUAL_POSITIONS['productName'].apply(lambda x: x.split('.')[0])
-
-        else:
-
-            # If we fall here it's because there are no positions held:
-            ACTUAL_POSITIONS = {'allocation': 0.0}
-
         # Get accounts and equity values:
         ACCOUNT_VALUES = self.ACCOUNT_API._Get_Accounts_()
         ACCOUNT_VALUES = self._convertToDataFrame(ACCOUNT_VALUES, [])
@@ -216,13 +202,21 @@ class DStrategyClass(DAssetUniverseClass, DModelClass):
         logger.warning(f'EQUITY VALUE: {equityValue}')
         investedValue = ACCOUNT_VALUES.loc[ACCOUNT_VALUES['id']==self.accountID, 'invested'][0]
         logger.warning(f'INVESTED VALUE: {investedValue}')
-        investedFraction = round(investedValue / equityValue, 2)
-        logger.warning(f'INVESTED FRACTION: {investedFraction}')
 
-        # Get the allocations based on all the equity:
-        if ACTUAL_POSITIONS['allocation'] != 0.0: 
+        # Check if we have positions:
+        if not ACTUAL_POSITIONS.empty:
 
-            # If the allocation is not zero:
+            # Get allocation value:
+            ACTUAL_POSITIONS['allocation'] = ACTUAL_POSITIONS['allocation'] / 100
+
+            # Change the names in the productName col:
+            ACTUAL_POSITIONS['productName'] = ACTUAL_POSITIONS['productName'].apply(lambda x: x.split('.')[0])
+
+            # Get investedFraction:
+            investedFraction = round(investedValue / equityValue, 2)
+            logger.warning(f'INVESTED FRACTION: {investedFraction}')
+
+            # Get the allocation total:
             ACTUAL_POSITIONS['allocation_total'] = round(ACTUAL_POSITIONS['allocation'] * investedFraction, 2)
 
             # Get the dictionary of allocation_total + productName:
@@ -230,11 +224,11 @@ class DStrategyClass(DAssetUniverseClass, DModelClass):
             logger.warning(f'ACTUAL POSITIONS FOR DT: <{datetime.now()}>')
             logger.warning(ACTUAL_POS_DICT)
 
-        elif ACTUAL_POSITIONS['allocation'] == 0.0:
+        else:
 
             # If we fall here it's because there are no positions held:
             ACTUAL_POS_DICT = {eachKey : 0.0 for eachKey in finalAllocationsDict}
-            
+
         # Pass to the trades calculation method:
         FINAL_CAPITAL_ALLOCATIONS = self._finalTradesCalculation(ACTUAL_POS_DICT, finalAllocationsDict, equityValue)
         logger.warning(f'FINAL CAPITAL ALLOCATIONS FOR DT: <{datetime.now()}>')
