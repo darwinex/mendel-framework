@@ -197,9 +197,10 @@ class DStrategyClass(DAssetUniverseClass, DModelClass):
         ACCOUNT_VALUES = self.ACCOUNT_API._Get_Accounts_()
         ACCOUNT_VALUES = self._convertToDataFrame(ACCOUNT_VALUES, [])
 
-        # Get invested fraction with the equity and invested capital:
-        equityValue = ACCOUNT_VALUES.loc[ACCOUNT_VALUES['id']==self.accountID, 'equity'][0] * totalAuMPercentage
-        logger.warning(f'EQUITY VALUE: {equityValue}')
+        # Get the equity and invested capital:
+        openPnL = round(ACCOUNT_VALUES.loc[ACCOUNT_VALUES['id']==self.accountID, 'openPnL'][0], 2)
+        equityRealizedValue = round((ACCOUNT_VALUES.loc[ACCOUNT_VALUES['id']==self.accountID, 'equity'][0] - openPnL) * totalAuMPercentage, 2)
+        logger.warning(f'EQUITY VALUE ({totalAuMPercentage * 100}%): {equityRealizedValue}')
         investedValue = ACCOUNT_VALUES.loc[ACCOUNT_VALUES['id']==self.accountID, 'invested'][0]
         logger.warning(f'INVESTED VALUE: {investedValue}')
 
@@ -212,15 +213,9 @@ class DStrategyClass(DAssetUniverseClass, DModelClass):
             # Change the names in the productName col:
             ACTUAL_POSITIONS['productName'] = ACTUAL_POSITIONS['productName'].apply(lambda x: x.split('.')[0])
 
-            # Get investedFraction:
-            investedFraction = round(investedValue / equityValue, 2)
-            logger.warning(f'INVESTED FRACTION: {investedFraction}')
-
-            # Get the allocation total:
-            ACTUAL_POSITIONS['allocation_total'] = round(ACTUAL_POSITIONS['allocation'] * investedFraction, 2)
-
-            # Get the dictionary of allocation_total + productName:
-            ACTUAL_POS_DICT = ACTUAL_POSITIONS.set_index('productName').to_dict()['allocation_total']
+            # Get the dictionary of allocation + productName:
+            # No need to normalize with equity > we need to keep the actual value invested to then SELL if needed.
+            ACTUAL_POS_DICT = ACTUAL_POSITIONS.set_index('productName').to_dict()['allocation']
             logger.warning(f'ACTUAL POSITIONS FOR DT: <{datetime.now()}>')
             logger.warning(ACTUAL_POS_DICT)
 
@@ -230,14 +225,14 @@ class DStrategyClass(DAssetUniverseClass, DModelClass):
             ACTUAL_POS_DICT = {eachKey : 0.0 for eachKey in finalAllocationsDict}
 
         # Pass to the trades calculation method:
-        FINAL_CAPITAL_ALLOCATIONS = self._finalTradesCalculation(ACTUAL_POS_DICT, finalAllocationsDict, equityValue)
+        FINAL_CAPITAL_ALLOCATIONS = self._finalTradesCalculation(ACTUAL_POS_DICT, finalAllocationsDict, equityRealizedValue, investedValue)
         logger.warning(f'FINAL CAPITAL ALLOCATIONS FOR DT: <{datetime.now()}>')
         logger.warning(FINAL_CAPITAL_ALLOCATIONS)
 
         # Return them:
         return FINAL_CAPITAL_ALLOCATIONS
 
-    def _finalTradesCalculation(self, actualAlloDict, finalAlloDict, actualEquity):
+    def _finalTradesCalculation(self, actualAlloDict, finalAlloDict, actualEquity, investedEquity):
 
         # Log:
         logger.warning(f'[FINAL_TRADES] - ACTUAL ALLO DICT: {actualAlloDict}')
@@ -257,7 +252,9 @@ class DStrategyClass(DAssetUniverseClass, DModelClass):
                 if actualAsset == finalAsset:
                     
                     # Get the change in capital we need to make:
-                    capitalFinal = (finalAllocation * actualEquity) - (actualAllocation * actualEquity)
+                    # For actualAllocation we need to use investedEquity as the real invested quantity.
+                    # The objective is that we update the position taking into account the new equity.
+                    capitalFinal = (finalAllocation * actualEquity) - (actualAllocation * investedEquity)
 
                     # Add it and add a boolean flag if we had actually the position (True) or not (False)
                     presenceBoolean = True if actualAllocation else False
@@ -310,6 +307,12 @@ class DStrategyClass(DAssetUniverseClass, DModelClass):
                     logger.warning(SELL_ORDER)
                     RETURNED_RESPONSE = self.TRADING_API._Sell_At_Market(_id=self.accountID, _order=SELL_ORDER)
                     self._assertRequestResponse(RETURNED_RESPONSE)
+
+                    # Check for if the remainder is less than 200 > Do stopout then:
+                    if 'Remainder' and 'minimum allowed' in RETURNED_RESPONSE['message']:
+
+                        logger.warning(f'REMAINDER FOR {eachProduct} IS LESS THAN 200 > DO STOPOUT AND SELL EVERYTHING!')
+                        self._closeDARWINPosition(darwinToClose=eachProduct)
 
                 except AssertionError:
                     logger.warning('TRADE_PORTFOLIO - Amount lower than neccesary')

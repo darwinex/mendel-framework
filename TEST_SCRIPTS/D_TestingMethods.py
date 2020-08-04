@@ -20,10 +20,10 @@ class DTestingMethods(object):
     def __init__(self):
 
         ### Let's create the auth credentials:
-        self.AUTH_CREDS = {'access_token': '1e517d8a-b3d7-3a40-8982-c1006f403389',
+        self.AUTH_CREDS = {'access_token': '9d615aee-daa6-31fa-ac3a-d7b61c3fbe8d',
                            'consumer_key': 'Z4_p3FDLhI5x9pMlYWHvyiWW04Qa',
                            'consumer_secret': 'NR6hDOCbjJEfYzB2Hg1B9nfHhpAa',
-                           'refresh_token': '6052cb70-0d40-347b-9682-8f8674ba7a5a'}
+                           'refresh_token': 'd962dba9-906b-3963-afb7-e0817e890667'}
 
         # Create the objects:
         self._defineAPIObjects()
@@ -399,62 +399,109 @@ class DTestingMethods(object):
           "productName": productName
         })
 
+    def _makeSellOrder(self, accountID):
+
+        TRADES = {'ERQ': [-47431.87, True]}
+
+        for eachProduct, (eachQuantity, presenceBoolean) in TRADES.items():
+
+            logger.warning('TRADE_PORTFOLIO - Selling loop initiated...')
+            eachQuantityAbs = 25000.00
+
+            SELL_ORDER = self._generateSellOrder(eachProduct, eachQuantityAbs)
+            RETURNED_RESPONSE = self.TRADING_API._Sell_At_Market(_id=accountID, _order=SELL_ORDER)
+            self._assertRequestResponse(RETURNED_RESPONSE)
+
     def _tradeDARWINPortfolio(self, tradesToExecuteDict, accountID):
 
+        logger.warning(f'TRADE_PORTFOLIO - Trading datetime is: <{datetime.now()}>')
+
+        # Ex: {'HFD': [-1486.9, True], 'SYO': [-2416.21, True], 'HLS': [-743.45, True], 'JKS': [2787.93, False], 'OPQ': [1858.62, False]}
+        sellTrades = {eachKey: eachValue for eachKey, eachValue in tradesToExecuteDict.items() if eachValue[0] < 0}
+        logger.warning(f'SELL TRADES: {sellTrades}')
+        buyTrades = {eachKey: eachValue for eachKey, eachValue in tradesToExecuteDict.items() if eachValue[0] > 0}
+        logger.warning(f'BUY TRADES: {buyTrades}')
+
         # First we need to SELL and then buy > Two loops:
-        sellTrades = {eachKey: eachValue for eachKey, eachValue in tradesToExecuteDict.items() if eachValue < 0}
-        logger.warning(sellTrades)
-        buyTrades = {eachKey: eachValue for eachKey, eachValue in tradesToExecuteDict.items() if eachValue > 0}
-        logger.warning(buyTrades)
+        # SELL LOOP:
+        for eachProduct, (eachQuantity, presenceBoolean) in sellTrades.items():
 
-        for eachProduct, eachQuantity in sellTrades.items():
-
-            logger.warning('Selling loop initiated...')
+            logger.warning('TRADE_PORTFOLIO - Selling loop initiated...')
             eachQuantityAbs = abs(eachQuantity)
 
-            if 0 <= eachQuantityAbs <= 200:
-                logger.warning('Amount lower than neccesary')
-                # Don't do anything:
-                # 200 USD is the minimum for new inv / 25 USD is the minimum to add
-                pass
+            # If we have actually a position on that asset.
+            if presenceBoolean:
+                try:
+                    # 25 USD is the minimum to sell
+                    assert eachQuantityAbs >= 25
 
+                    # Sell:
+                    SELL_ORDER = self._generateSellOrder(eachProduct, eachQuantityAbs)
+                    logger.warning(f'SELL ORDER GENERATED FOR {eachProduct} WITH QUANTITY {eachQuantityAbs}:')
+                    logger.warning(SELL_ORDER)
+                    RETURNED_RESPONSE = self.TRADING_API._Sell_At_Market(_id=self.accountID, _order=SELL_ORDER)
+                    self._assertRequestResponse(RETURNED_RESPONSE)
+
+                except AssertionError:
+                    logger.warning('TRADE_PORTFOLIO - Amount lower than neccesary')
+            
+            # If we don't have actually a position on that asset.
             else:
-                # Sell:
-                SELL_ORDER = self._generateSellOrder(eachProduct, eachQuantityAbs)
-                RETURNED_RESPONSE = self.TRADING_API._Sell_At_Market(_id=accountID, _order=SELL_ORDER)
-                self._assertRequestResponse(RETURNED_RESPONSE)
+                # Doesn't apply as it is a sell > We will sell if we have a position:
+                logger.warning('TRADE_PORTFOLIO - Does not apply as it is a sell action')
 
-        logger.warning('¡Selling loop concluded!')
+        logger.warning('TRADE_PORTFOLIO - ¡Selling loop concluded!')
 
-        for eachProduct, eachQuantity in buyTrades.items():
+        # BUY LOOP:
+        for eachProduct, (eachQuantity, presenceBoolean) in buyTrades.items():
 
-            logger.warning('Buying loop initiated...')
+            logger.warning('TRADE_PORTFOLIO - Buying loop initiated...')
 
-            if 0 <= eachQuantity <= 200:
-                logger.warning('Amount lower than neccesary')
-                # Don't do anything:
-                # 200 USD is the minimum for new inv / 25 USD is the minimum to add
-                pass
+            # If we have actually a position on that asset.
+            if presenceBoolean:
+                try:
+                    # 25 USD is the minimum to add
+                    assert eachQuantity >= 25
 
+                    # Buy:
+                    BUY_ORDER = self._generateBuyOrder(eachProduct, eachQuantity, {})
+                    logger.warning(f'BUY ORDER GENERATED FOR {eachProduct} WITH QUANTITY {eachQuantity}:')
+                    logger.warning(BUY_ORDER)
+                    RETURNED_RESPONSE = self.TRADING_API._Buy_At_Market_(_id=self.accountID, _order=BUY_ORDER)
+                    self._assertRequestResponse(RETURNED_RESPONSE)
+
+                except AssertionError:
+                    logger.warning('TRADE_PORTFOLIO - Amount lower than neccesary')
+            
+            # If we don't have actually a position on that asset.
             else:
-                # Buy:
-                BUY_ORDER = self._generateBuyOrder(eachProduct, eachQuantity, {})
-                RETURNED_RESPONSE = self.TRADING_API._Buy_At_Market_(_id=accountID, _order=BUY_ORDER)
-                self._assertRequestResponse(RETURNED_RESPONSE)
+                try:
+                    # 200 USD is the minimum to get a position
+                    assert eachQuantity >= 200
 
-        logger.warning('Buying loop concluded!')
+                    # Buy:
+                    BUY_ORDER = self._generateBuyOrder(eachProduct, eachQuantity, {})
+                    logger.warning('BUY ORDER GENERATED:')
+                    logger.warning(BUY_ORDER)
+                    RETURNED_RESPONSE = self.TRADING_API._Buy_At_Market_(_id=self.accountID, _order=BUY_ORDER)
+                    self._assertRequestResponse(RETURNED_RESPONSE)
+
+                except AssertionError:
+                    logger.warning('TRADE_PORTFOLIO - Amount lower than neccesary')
+
+        logger.warning('TRADE_PORTFOLIO - Buying loop concluded!')
 
 if __name__ == "__main__":
 
     # Get it:
     DASSETUNIVERSE = DTestingMethods()
     #DASSETUNIVERSE._createFilteredPortfolio()
-    A = DASSETUNIVERSE._currentPositions(accountID=2000069671)
+    #A = DASSETUNIVERSE._currentPositions(accountID=2000069671)
     
-    if A.empty:
-        print('ADSADADA')
-    elif not A.empty:
-        print('qdwqeqeqeq')
+    #if A.empty:
+    #    print('ADSADADA')
+    #elif not A.empty:
+    #    print('qdwqeqeqeq')
 
     # This worked:
     #alloWeights = np.array([0.13, 0.65, 0.2105])
@@ -480,6 +527,9 @@ if __name__ == "__main__":
     #DASSETUNIVERSE._closeAllPositions(accountID=2000062056)
     #time.sleep(4)
     #DASSETUNIVERSE._currentPositions(accountID=2000062056)
+
+    # This worked:
+    DASSETUNIVERSE._makeSellOrder(accountID=2000069671)
 
     # This worked:
     #tradesDict = {'SYO.5.24': -2513.46}
