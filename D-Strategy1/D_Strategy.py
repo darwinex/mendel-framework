@@ -309,10 +309,15 @@ class DStrategyClass(DAssetUniverseClass, DModelClass):
                     self._assertRequestResponse(RETURNED_RESPONSE)
 
                     # Check for if the remainder is less than 200 > Do stopout then:
-                    if 'Remainder' and 'minimum allowed' in RETURNED_RESPONSE['message']:
+                    # Check if 'message' key is present and certain message string:
+                    if 'message' in RETURNED_RESPONSE and 'Remainder' in RETURNED_RESPONSE['message']:
 
                         logger.warning(f'REMAINDER FOR {eachProduct} IS LESS THAN 200 > DO STOPOUT AND SELL EVERYTHING!')
                         self._closeDARWINPosition(darwinToClose=eachProduct)
+
+                    else:
+                        # No message key > Response is succesfull.
+                        logger.warning(f'NO REMAINDER problem for {eachProduct} > CONTINUE!')
 
                 except AssertionError:
                     logger.warning('TRADE_PORTFOLIO - Amount lower than neccesary')
