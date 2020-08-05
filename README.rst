@@ -31,30 +31,32 @@ Explanations
 
 **The best way** to understand how to use the framework is watching the `dedicated playlist in our Youtube Channel <https://www.youtube.com/channel/UC6aYa9XjWy-HmHhyp5uN_9g>`_ while looking at the source code in this repository.
 
-Apart from that, we will give you essential steps to get it working right away.
+There is an actual working implementation so that you can try it out; you will need to dig in a bit into the code to see which **DARWINs** are considered to trade and which is the model to use. **THERE IS NO GUARANTEE that the example strategy will yield profits**, but it covers many implementation details and it is worth trying it to see how it performs and get accustomed to the framework in a **DEMO** environment/account.
 
-Firstly, you will need to provide new tokens on the ``APICredentials.json`` file that is inside the ``/D-Strategy1`` folder. This is neccesary in order to start the ``D-Refresher`` component and get automatic requests of the ``access`` and ``refresh`` tokens.
+Apart from that, we will give you essential steps to get it working right away with the actual provided example:
+
+**1)** You will need to provide new tokens on the ``APICredentials.json`` file that is inside the ``/D-Strategy1`` folder. This is neccesary in order to start the ``D-Refresher`` component and get automatic requests of the ``access`` and ``refresh`` tokens. For that, just go into the platform and request new tokens in the DARWIN API tab.
 
 Once done that, the back-end will handle getting new access tokens using the refresh token via the **DRefresher** component.
 
-After the initial credentials set-up, you will need to provide the ``accountID`` in the initialization of the ``DStrategy`` class.
+**2)** After the initial credentials set-up, you will need to provide the ``accountID`` in the initialization of the ``DStrategy`` class.
 
 **BEAR IN MIND** that the code in this project will execute in the ``accountID`` that you provide in the instantiation of the 
 ``DStrategy`` class, so watch out very carefully which ``accountID`` do you use to avoid wrong executions.
 
-There is an actual working implementation so that you can try it out; you will need to dig in a bit into the code to see which **DARWINs** are considered to trade and which is the model to use. **THERE IS NO GUARANTEE that the example strategy will yield profits**, but it covers many implementation details and it is worth trying it to see how it performs and get accustomed to the framework.
-
-Regarding ``Docker``, as it is a complex framework and comprises many different functionalities, the best way to get going
+**3)** Regarding ``Docker``, as it is a complex framework and comprises many different functionalities, the best way to get going
 is to look for some tutorials on the internet or directly visit: `Docker main website <https://docs.docker.com/get-started/>`_, apart from the tutorials that are in the `Darwinex Youtube Channel <https://www.youtube.com/channel/UC6aYa9XjWy-HmHhyp5uN_9g>`_ that walkthrough this specific implementation.
 
 In this case, the ``Docker images`` for this project are hosted on the `Darwinex Alpha Team Public Docker Hub repository <https://hub.docker.com/repository/docker/dwxalphateam/mendelframework>`_ as examples. 
 
 In case that you want to implement this for your own accounts, **the best way** would be to create a dedicated Docker Hub account with your ``DStrategy`` image hosted there (you have one private repository for free) and use the ``DBaseImage`` and the ``DRefresher`` from the Darwinex Alpha Team Public Docker Hub repository or just build your own.
 
-The ``Mendel Framework`` has functionality built-in to send ``Telegram`` messages via a ``Telegram Bot``. For that matter, you will need to build your own bot and use its specific token. The tutorial for that is in the dedicated playlist of our **Youtube Channel** as detailed above. You can just comment the lines associated to it and re-create the images if you don't want to use it directly.
+**4)** The ``Mendel Framework`` has functionality built-in to send ``Telegram`` messages via a ``Telegram Bot``. For that matter, you will need to build your own bot and use its specific token. The tutorial for that is in the dedicated playlist of our **Youtube Channel** as detailed above. You can just comment the lines associated to it and re-create the images if you don't want to use it directly.
 
-Tools installation walkthrough
-==============================
+**5)** Afterwards, just execute the below steps. Depending on your actual environment, you will need to install some tools or not.
+
+Example execution and installation walkthrough
+==============================================
 
 Once that you have developed/modified all the neccesary scripts within the ``Mendel Framework``, this would be the steps to run the ``docker services`` on a Linux machine:
 
@@ -111,7 +113,10 @@ This will pull the ``images`` that are defined in the ``docker-compose`` of that
 
 Edit your ``crontab`` file (``crontab -e``) with something like the following contents. 
 
-For this to work out, you will need to have the exact path on your server/computer and have downloaded the repository. 
+For this to work, you will need to have the exact path on your server/computer and have downloaded the repository. 
+
+If you want to just execute it right away, you can run the commands **without** ``cron`` for the strategy. In the case of the
+``DRefresher``, it should be executed once every 30 minute to refresh the access credentials. 
 
 ::
 
