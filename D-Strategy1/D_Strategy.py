@@ -329,6 +329,9 @@ class DStrategyClass(DAssetUniverseClass, DModelClass):
 
         logger.warning('TRADE_PORTFOLIO - ¡Selling loop concluded!')
 
+        # Sleep for some time to allow balance appear in the account:
+        time.sleep(5)
+
         # BUY LOOP:
         for eachProduct, (eachQuantity, presenceBoolean) in buyTrades.items():
 
