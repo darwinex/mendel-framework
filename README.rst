@@ -5,11 +5,11 @@ Dαrwinex Mendel Framework for DARWIN Portfolio Management
 
 This is the **Dαrwinex Mendel Framework for DARWIN Portfolio Management in Python**. 
 
-Precisely, this framework is called the ``Mendel`` framework because it is created to **manage quantitatively and dynamically, portfolios of DARWINS** and applying quantitative **R&D** for generating investment decisions.
+Inspired by [Gregor Mendel](https://en.wikipedia.org/wiki/Gregor_Mendel), the ``Mendel`` framework was created to **manage quantitatively and dynamically, portfolios of DARWINS** and applying quantitative **R&D** for generating investment decisions.
 
 So, based on an asset universe of **DARWINs**, we will need to select those that meet certain criteria.
 
-A worflow example would be:
+A workflow example would be:
 
 **1)** Live/batch request of **DARWIN** universe data. For example, apply a filter to get **DARWINs** with certain returns threshold for the last 3 months.
 
